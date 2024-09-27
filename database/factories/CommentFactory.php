@@ -18,7 +18,7 @@ class CommentFactory extends Factory
     {
         return [
             'body' => $this->faker->text,
-            'user_id' => rand(1, 5),
+            'user_id' => $this->faker->numberBetween(1,5)
         ];
     }
 }

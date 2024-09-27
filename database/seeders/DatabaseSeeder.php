@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Comment;
 use Illuminate\Database\Seeder;
 use App\Models\Group;
 use App\Models\Level;
@@ -21,59 +22,59 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Creates 3 groups
+        // Crear 3 grupos automáticamente
         Group::factory(3)->create();
 
-        // Creates levels: Gold, Silver and Bronze
-        Level::factory()->create(['name' => 'Gold']);
-        Level::factory()->create(['name' => 'Silver']);
-        Level::factory()->create(['name' => 'Bronze']);
+        // Crear niveles Oro, Plata, Bronce
+        Level::factory()->create(['name' => 'Oro']);
+        Level::factory()->create(['name' => 'Plata']);
+        Level::factory()->create(['name' => 'Bronce']);
 
-        // Creates 5 users and associates a profile, location, groups, image
+        // Crear 5 usuarios y vincular perfiles, ubicaciones, grupos e imágenes
         User::factory(5)->create()->each(function($user) {
-            // Creates a profile associated with the user
+            // Crear un perfil asociado al usuario
             $profile = $user->profile()->save(Profile::factory()->make());
 
-            // Creates a location associated with the profile
+            // Crear una ubicación asociada al perfil
             $profile->location()->save(Location::factory()->make());
 
-            // Associates the user with a group
+            // Asociar el usuario con uno o más grupos
             $user->groups()->attach($this->array(rand(1, 3)));
 
-            // Associates an image with the user
+            // Asociar una imagen al usuario
             $user->image()->save(Image::factory()->make(['url' => 'https://lorempixel.com/90/90']));
         });
 
-        // Creates 4 categories
+        // Crear 4 categorías
         Category::factory(4)->create();
 
-        // Creates 12 tags
+        // Crear 12 tags
         Tag::factory(12)->create();
 
-        // Creates 40 posts and associates images, tags and comments
+        // Crear 40 posts y vincular imágenes, tags y comentarios
         Post::factory(40)->create()->each(function($post) {
-            // Associates an image with the post
+            // Asociar una imagen al post
             $post->image()->save(Image::factory()->make());
 
-            // Associates tags with the post
+            // Asociar tags al post
             $post->tags()->attach($this->array(rand(1, 12)));
 
-            // Creates a random number of comments
+            // Crear un número aleatorio de comentarios
             $number_comments = rand(1, 6);
             for ($i = 0; $i < $number_comments; $i++) {
                 $post->comments()->save(\App\Models\Comment::factory()->make());
             }
         });
 
-        // Creates 40 videos and associates images, tags and comments
+        // Crear 40 videos y vincular imágenes, tags y comentarios
         Video::factory(40)->create()->each(function($video) {
-            // Associates an image with the video
+            // Asociar una imagen al video
             $video->image()->save(Image::factory()->make());
 
-            // Associates tags with the video
+            // Asociar tags al video
             $video->tags()->attach($this->array(rand(1, 12)));
 
-            // Creates a random number of comments
+            // Crear un número aleatorio de comentarios
             $number_comments = rand(1, 6);
             for ($i = 0; $i < $number_comments; $i++) {
                 $video->comments()->save(\App\Models\Comment::factory()->make());
@@ -82,7 +83,7 @@ class DatabaseSeeder extends Seeder
     }
 
     /**
-     * Returns an array of values from 1 to $max
+     * Función auxiliar para generar un array de valores.
      */
     public function array($max)
     {
